@@ -1,0 +1,93 @@
+@startuml sequence-order
+title EDMS — Диаграммаи пайдарпайӣ: POST /documents/{id}/approve (мувофиқасозии ҳуҷҷат)
+
+autonumber
+skinparam shadowing false
+skinparam defaultFontName Arial
+skinparam ArrowColor #4F46E5
+skinparam sequenceMessageAlign left
+skinparam ParticipantPadding 24
+skinparam participantBackgroundColor #EEF0FF
+skinparam participantBorderColor #4F46E5
+skinparam actorBackgroundColor #EEF0FF
+skinparam actorBorderColor #4F46E5
+skinparam databaseBackgroundColor #FEF3C7
+skinparam databaseBorderColor #F59E0B
+skinparam noteBackgroundColor #FFFBEB
+skinparam noteBorderColor #F59E0B
+
+actor "Мувофиқкунанда\n(Корманд / Роҳбар)" as U
+participant "Браузер" as B
+participant "index.php\n+ Router" as R
+participant "DocumentController" as C
+participant "DocumentRepository" as Repo
+database "MySQL\n(edms)" as DB
+
+U -> B : Шарҳ менависад ва «Тасдиқ кардан» ё\n«Баргардонидан»-ро пахш мекунад
+activate B
+B -> R : POST /documents/{id}/approve\ncsrf, decision (approve | reject), comment\nCookie: PHPSESSID
+activate R
+R -> R : session_start();\nсанҷиши корбар (me()) ва нақш
+
+alt Сессия мавҷуд нест
+  R --> B : 302 Location: /login.php
+else Сессия фаъол
+  R -> R : csrf_check()
+  alt Токени CSRF нодуруст
+    R --> B : 400 «Хатогии CSRF»
+  else Токен дуруст
+    R -> C : approve(docId, userId, decision, comment)
+    activate C
+    C -> Repo : findCurrentStep(docId, userId)
+    activate Repo
+    Repo -> DB : SELECT a.id, a.document_id FROM approvals a\nWHERE a.id=? AND a.user_id=? AND a.status='pending'\nAND NOT EXISTS (қадами пешин бо status <> 'approved')
+    activate DB
+    DB --> Repo : сатр | ∅
+    deactivate DB
+    Repo --> C : ApprovalStep | null
+    deactivate Repo
+
+    alt step = null (навбати шумо нест ё қарор қаблан қабул шудааст)
+      C --> R : Error 403 (амал иҷро намешавад)
+      R --> B : 302 /approvals.php (бе тағйирот)
+    else decision = reject ва comment холӣ
+      C --> R : Error 422 (шарҳ ҳатмист)
+      R --> B : 302 /approvals.php\nflash «Сабаби радкуниро нависед»
+    else decision = approve
+      C -> Repo : decide(stepId, 'approved', comment)
+      Repo -> DB : UPDATE approvals SET status='approved',\ncomment=?, decided_at=NOW() WHERE id=?
+      DB --> Repo : OK
+      C -> Repo : countNotApproved(docId)
+      Repo -> DB : SELECT COUNT(*) FROM approvals\nWHERE document_id=? AND status <> 'approved'
+      DB --> Repo : n
+      Repo --> C : n
+      alt n = 0 (ҳамаи қадамҳо тасдиқ шуданд)
+        C -> Repo : setDocumentStatus(docId, 'approved')
+        Repo -> DB : UPDATE documents SET status='approved' WHERE id=?
+        DB --> Repo : OK
+      else n > 0
+        note right of C
+          Ҳуҷҷат дар 'review' мемонад,
+          қадами навбатӣ кушода мешавад.
+        end note
+      end
+      C --> R : OK
+      R --> B : 302 /approvals.php\nflash «Ҳуҷҷат тасдиқ шуд»
+    else decision = reject (бо шарҳ)
+      C -> Repo : decide(stepId, 'rejected', comment)
+      Repo -> DB : UPDATE approvals SET status='rejected',\ncomment=?, decided_at=NOW() WHERE id=?
+      DB --> Repo : OK
+      C -> Repo : setDocumentStatus(docId, 'rejected')
+      Repo -> DB : UPDATE documents SET status='rejected' WHERE id=?
+      DB --> Repo : OK
+      C --> R : OK
+      R --> B : 302 /approvals.php\nflash «Ҳуҷҷат баргардонида шуд»
+    end
+    deactivate C
+  end
+end
+deactivate R
+
+B --> U : Саҳифаи навшуда + паёми toast
+deactivate B
+@enduml

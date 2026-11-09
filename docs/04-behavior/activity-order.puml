@@ -1,0 +1,112 @@
+@startuml activity-order
+title EDMS — Диаграммаи фаъолият: гардиши ҳуҷҷат (бақайдгирӣ → мувофиқа → резолютсия → иҷро)
+
+skinparam shadowing false
+skinparam defaultFontName Arial
+skinparam ArrowColor #4F46E5
+skinparam activityBackgroundColor #F4F5FB
+skinparam activityBorderColor #6366F1
+skinparam activityDiamondBackgroundColor #FEF3C7
+skinparam activityDiamondBorderColor #F59E0B
+skinparam swimlaneBorderColor #A3A9D1
+skinparam noteBackgroundColor #FFFBEB
+skinparam noteBorderColor #F59E0B
+
+|#E0E7FF|Девонхона|
+|#F3F4F6|Система|
+|#FCE7F3|Роҳбар|
+|#DCFCE7|Корманд|
+
+|Девонхона|
+start
+:Қабул ва скани ҳуҷҷат;
+
+repeat
+  |Девонхона|
+  :Ворид кардани рақам, санаи воридшавӣ,\nнамуд (воридотӣ / содиротӣ / дохилӣ),\nмавзӯъ, муҳимӣ, фиристанда / қабулкунанда;
+  |Система|
+  :Санҷиши майдонҳои ҳатмӣ\n(рақам, сана, мавзӯъ, намуд);
+repeat while (Майдонҳо нодурустанд?) is (ҳа) not (не)
+
+if (Файл замима шудааст ва формат\nPDF / DOC / DOCX / JPG аст?) then (ҳа)
+  :Захира дар uploads/ бо номи тасодуфӣ;
+else (не)
+  :Ҳуҷҷат бе файл захира мешавад;
+endif
+
+:INSERT INTO documents\n**documents.status = 'registered'**;
+
+|Девонхона|
+if (Ҳуҷҷат мувофиқа талаб мекунад?) then (ҳа)
+  :Ташкили масири мувофиқа\n(мувофиқкунандагон бо тартиби қадамҳо);
+  |Система|
+  :INSERT INTO approvals\n**approvals.status = 'pending'**, step_order = 1..N;
+  :UPDATE documents\n**documents.status = 'review'**;
+
+  while (Қадами 'pending' боқӣ мондааст?) is (ҳа)
+    |Система|
+    :Кушодани қадами ҷорӣ\n(ҳамаи қадамҳои пешин 'approved' мебошанд);
+    |Корманд|
+    :Баррасии ҳуҷҷат аз ҷониби мувофиқкунанда\n(ҳуқуқшинос, сармуҳосиб, муовини роҳбар);
+    if (Қарор?) then (Тасдиқ кардан)
+      |Система|
+      :**approvals.status = 'approved'**\ndecided_at = NOW();
+    else (Баргардонидан)
+      |Корманд|
+      repeat
+        :Навиштани сабаби радкунӣ;
+      repeat while (Шарҳ холӣ аст?) is (ҳа) not (не)
+      |Система|
+      :**approvals.status = 'rejected'**;
+      :**documents.status = 'rejected'**;
+      |Девонхона|
+      :Огоҳӣ ба муаллиф, ислоҳи ҳуҷҷат\nва бақайдгирии такрорӣ;
+      stop
+    endif
+  endwhile (не)
+
+  :**documents.status = 'approved'**\n(ҳамаи қадамҳо тасдиқ шуданд);
+else (не)
+  :Қадами мувофиқа истифода намешавад;
+endif
+
+|Роҳбар|
+:Баррасии ҳуҷҷат;
+:Навиштани резолютсия (матн),\nтаъини иҷрокунанда ва мӯҳлат;
+|Система|
+:INSERT INTO resolutions;\nINSERT INTO tasks (**tasks.status = 'new'**);
+:**documents.status = 'in_progress'**;
+
+|Корманд|
+:Қабули супориш ва иҷрои кор;
+
+|Система|
+if (tasks.deadline < NOW()\nва tasks.status <> 'done'?) then (ҳа)
+  :Нишон додани ранги сурх\n«Мӯҳлатгузашта» (дашборд, рӯйхати супоришҳо);
+else (не)
+  :Супориш дар мӯҳлат;
+endif
+
+|Корманд|
+:Таҳияи ҳисобот ва файли натиҷавӣ;
+|Система|
+:UPDATE tasks\n**tasks.status = 'done'**, done_at = NOW();
+
+if (Ҳамаи супоришҳои ҳуҷҷат 'done' ҳастанд?) then (ҳа)
+  :**documents.status = 'done'**;
+else (не)
+  :Ҳуҷҷат дар 'in_progress' мемонад\n(интизори супоришҳои дигар);
+endif
+
+|Роҳбар|
+:Назорат: дидани ҳисобот ва ҳолати иҷро;
+stop
+
+legend right
+  **Статусҳои воқеии базаи додаҳо (MySQL)**
+  documents.status : registered, review, in_progress,
+                     approved, rejected, done
+  approvals.status : pending, approved, rejected
+  tasks.status     : new, in_progress, done
+endlegend
+@enduml

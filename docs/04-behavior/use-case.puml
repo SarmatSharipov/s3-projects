@@ -1,0 +1,104 @@
+@startuml use-case
+title EDMS — Диаграммаи прецедентҳо (Use Case Diagram)
+
+left to right direction
+skinparam shadowing false
+skinparam roundCorner 14
+skinparam defaultFontName Arial
+skinparam ArrowColor #4F46E5
+skinparam actorBackgroundColor #EEF0FF
+skinparam actorBorderColor #4F46E5
+skinparam usecaseBackgroundColor #F4F5FB
+skinparam usecaseBorderColor #6366F1
+skinparam rectangleBorderColor #4F46E5
+skinparam noteBackgroundColor #FFFBEB
+skinparam noteBorderColor #F59E0B
+
+actor "Девонхона\n(Chancellery)" as CH
+actor "Роҳбар\n(Manager / Director)" as DIR
+actor "Корманд\n(Employee)" as EMP
+
+rectangle "EDMS — системаи вебии гардиши электронии ҳуҷҷатҳо" {
+
+  usecase "UC-01\nВорид шудан (login)" as UC01
+
+  package "Бақайдгирӣ ва ҷустуҷӯ" {
+    usecase "UC-02\nБақайдгирии ҳуҷҷат\n(воридотӣ / содиротӣ / дохилӣ)" as UC02
+    usecase "UC-03\nЗамима кардани файли скан\n(PDF, DOC, DOCX, JPG)" as UC03
+    usecase "UC-04\nҶустуҷӯ ва филтркунии ҳуҷҷатҳо" as UC04
+  }
+
+  package "Мувофиқасозӣ (Approval Route)" {
+    usecase "UC-05\nТаъини масири мувофиқа\n(қадамҳои пайдарпай)" as UC05
+    usecase "UC-06\nМувофиқасозии ҳуҷҷат\n(тасдиқ / баргардонидан)" as UC06
+    usecase "UC-07\nНавиштани сабаби радкунӣ" as UC07
+  }
+
+  package "Резолютсия ва супоришҳо" {
+    usecase "UC-08\nГузоштани резолютсия" as UC08
+    usecase "UC-09\nТаъини иҷрокунанда ва мӯҳлат" as UC09
+    usecase "UC-10\nИҷрои супориш" as UC10
+    usecase "UC-11\nПешниҳоди ҳисобот\nва файли натиҷавӣ" as UC11
+  }
+
+  package "Назорат ва ҳисобот" {
+    usecase "UC-12\nНазорати иҷро ва мӯҳлатҳо" as UC12
+    usecase "UC-13\nОгоҳии «Мӯҳлатгузашта»\n(ранги сурх)" as UC13
+    usecase "UC-14\nБаровардани ҳисобот\n(Excel / PDF)" as UC14
+  }
+}
+
+' ---------- Актор — прецедент ----------
+CH  --> UC01
+DIR --> UC01
+EMP --> UC01
+
+CH  --> UC02
+CH  --> UC04
+CH  --> UC05
+
+DIR --> UC04
+DIR --> UC05
+DIR --> UC06
+DIR --> UC08
+DIR --> UC12
+DIR --> UC14
+
+EMP --> UC04
+EMP --> UC06
+EMP --> UC10
+
+' ---------- <<include>> : ҳамеша иҷро мешавад ----------
+UC08 .> UC09 : <<include>>
+UC10 .> UC11 : <<include>>
+
+' ---------- <<extend>> : шартӣ / ихтиёрӣ ----------
+UC03 .> UC02 : <<extend>>
+UC07 .> UC06 : <<extend>>
+UC13 .> UC12 : <<extend>>
+
+note right of UC03
+  Шарт: файли скан замима шудааст
+  ва формат иҷозатдодашуда аст.
+end note
+
+note right of UC07
+  Шарт: қарор = «Баргардонидан».
+  Шарҳ (сабаб) ҳатмист.
+end note
+
+note right of UC13
+  Шарт: tasks.deadline < NOW()
+  ва tasks.status <> 'done'.
+end note
+
+note bottom of UC06
+  Қадами n танҳо баъд аз он кушода мешавад,
+  ки ҳамаи қадамҳои пешин 'approved' бошанд.
+end note
+
+note as N1
+  Ҳамаи прецедентҳо танҳо баъд аз UC-01
+  (аутентификатсия) ва санҷиши нақш дастрасанд.
+end note
+@enduml
