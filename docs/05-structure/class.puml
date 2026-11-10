@@ -1,0 +1,101 @@
+@startuml class
+title Гардиши электронии ҳуҷҷатҳо: Диаграммаи синфҳо
+
+skinparam classAttributeIconSize 0
+hide empty members
+
+package "Модели домени" {
+    class Document <<entity>> {
+        +id: int
+        +title: string
+        +content: string
+        +createdAt: date
+        +status: DocumentStatus
+        +sign(): bool
+    }
+
+    class DocumentType <<entity>> {
+        +id: int
+        +typeName: string
+        +templatePath: string
+    }
+
+    class Department <<entity>> {
+        +id: int
+        +name: string
+    }
+
+    class User <<entity>> {
+        +id: int
+        +username: string
+        -passwordHash: string
+        +role: Role
+        +isActive: bool
+    }
+
+    class ApprovalProcess <<entity>> {
+        +id: int
+        +stepOrder: int
+        +status: ApprovalStatus
+        +comment: ?string
+        +approve(u: User)
+        +reject(u: User)
+    }
+
+    enum DocumentStatus {
+        draft
+        under_review
+        approved
+        rejected
+        archived
+    }
+
+    enum ApprovalStatus {
+        pending
+        approved
+        rejected
+    }
+
+    enum Role {
+        author
+        manager
+        director
+        admin
+    }
+}
+
+DocumentType "1" -- "0..*" Document : муайян мекунад >
+Department "1" -- "0..*" User : кормандон >
+User "1" -- "0..*" Document : эҷод кардааст >
+Document "1" *-- "1..*" ApprovalProcess : марҳилаҳои тасдиқ >
+User "1" -- "0..*" ApprovalProcess : иҷро мекунад >
+Document ..> DocumentStatus
+ApprovalProcess ..> ApprovalStatus
+User ..> Role
+
+package "Замима (src/)" {
+    class DocumentController {
+        -repo: DocumentRepository
+        -auth: Auth
+        +index(): void
+        +store(): void
+        +approve(id: int): void
+    }
+
+    class DocumentRepository {
+        -db: Database
+        +findById(id: int): ?array
+        +create(data: array): int
+        +updateStatus(id: int, status: string): bool
+    }
+
+    class Database {
+        -pdo: PDO
+        +pdo(): PDO
+    }
+}
+
+DocumentController --> DocumentRepository
+DocumentRepository --> Database
+
+@enduml

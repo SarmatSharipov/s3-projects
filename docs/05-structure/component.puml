@@ -1,0 +1,45 @@
+@startuml component
+title Гардиши электронии ҳуҷҷатҳо: Диаграммаи компонентҳо
+
+node "Мизоҷ" {
+    [Браузер\n (HTML, Bootstrap, JavaScript)] as Browser
+}
+
+node "Веб-сервер (Apache / Nginx + PHP)" {
+    package "Сатҳи муаррифӣ" {
+        [public/index.php\n(Front Controller)] as Front
+        [views/*.php\n (Шаблонҳо)] as Views
+        [Core\\View] as View
+    }
+
+    package "Сатҳи мантиқ" {
+        [Core\\Router] as Router
+        [Controllers\n(Document, User, Approval, Report)] as Controllers
+        [Core\\Auth, Validator, Session, Csrf] as Services
+    }
+
+    package "Сатҳи додаҳо" {
+        [Repositories\n(Document, DocumentType, ApprovalProcess, User)] as Repos
+        [Core\\Database\n (PDO)] as Db
+    }
+}
+
+database "MySQL\ne_document_db" as MySQL
+
+Browser --> Front : HTTP (GET/POST)
+Front --> Router
+Router --> Controllers
+Controllers --> Services
+Controllers --> Repos
+Controllers --> View
+View --> Views
+Repos --> Db
+Db --> MySQL : PDO / SQL
+
+legend right
+Model = Repositories + Database
+View = Core\\View + views/*.php
+Controller = Controllers (тавассути Router)
+endlegend
+
+@enduml
