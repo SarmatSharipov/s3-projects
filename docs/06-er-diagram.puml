@@ -1,0 +1,84 @@
+@startuml er-diagram
+title EDMS: Модели мантиқии базаи додаҳо (ER Diagram)
+hide circle
+skinparam linetype ortho
+
+entity departments {
+  * id : INT <<PK>>
+  --
+  * name : VARCHAR(150)
+}
+
+entity users {
+  * id : INT <<PK>>
+  --
+  * full_name : VARCHAR(150)
+  * login : VARCHAR(50) <<UQ>>
+  * password : VARCHAR(255)
+  * role : ENUM
+  department_id : INT <<FK>>
+}
+
+entity documents {
+  * id : INT <<PK>>
+  --
+  * number : VARCHAR(50)
+  * doc_date : DATE
+  * subject : VARCHAR(255)
+  * type : ENUM
+  * importance : ENUM
+  sender : VARCHAR(150)
+  receiver : VARCHAR(150)
+  scan_file : VARCHAR(255)
+  * status : ENUM
+  * created_by : INT <<FK>>
+  * created_at : TIMESTAMP
+}
+
+entity resolutions {
+  * id : INT <<PK>>
+  --
+  * document_id : INT <<FK>>
+  * director_id : INT <<FK>>
+  * text : TEXT
+  * created_at : TIMESTAMP
+}
+
+entity tasks {
+  * id : INT <<PK>>
+  --
+  * document_id : INT <<FK>>
+  resolution_id : INT <<FK>>
+  * executor_id : INT <<FK>>
+  * assigned_by : INT <<FK>>
+  * deadline : DATETIME
+  * status : ENUM
+  report : TEXT
+  report_file : VARCHAR(255)
+  done_at : DATETIME
+  * created_at : TIMESTAMP
+}
+
+entity approvals {
+  * id : INT <<PK>>
+  --
+  * document_id : INT <<FK>>
+  * user_id : INT <<FK>>
+  * step_order : INT
+  * status : ENUM
+  comment : TEXT
+  decided_at : DATETIME
+}
+
+departments ||--o{ users
+users ||--o{ documents : "created_by"
+documents ||--o{ resolutions
+documents ||--o{ tasks
+documents ||--o{ approvals
+users ||--o{ resolutions : "director"
+users ||--o{ tasks : "executor"
+users ||--o{ tasks : "assigned_by"
+users ||--o{ approvals
+resolutions ||--o| tasks
+
+@enduml
