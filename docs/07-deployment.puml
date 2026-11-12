@@ -1,0 +1,42 @@
+@startuml deployment
+title EDMS: Диаграммаи ҷойгиркунӣ (Deployment Diagram)
+
+node "Компютер / Смартфони корбар" as client {
+  artifact "Браузер\n(Chrome / Firefox / Edge)" as browser
+}
+
+node "Linux VDS / Сервери корӣ (Ubuntu 24.04)" as vds {
+  node "Веб-сервер" as web {
+    node "Nginx 1.24" as nginx {
+      artifact "deploy/nginx.conf" as nconf
+    }
+  }
+
+  node "Муҳити иҷрои барнома" as runtime {
+    node "PHP-FPM 8.2" as fpm {
+      artifact "public/index.php\nsrc/, views/, vendor/" as app
+      artifact "config/config.php\n(.env)" as cfg
+    }
+  }
+
+  database "СИПД" as sdb {
+    database "MySQL 8 / MariaDB\nedms (utf8mb4)" as db
+  }
+
+  folder "Файлгоҳи сервер" as storage {
+    folder "public/uploads/\n(файлҳои сканершуда ва ҳисоботҳо)" as uploads
+  }
+}
+
+note right of db
+  Пойгоҳ танҳо 127.0.0.1-ро
+  гӯш мекунад (Амният)
+end note
+
+browser --> nginx : HTTPS (443)
+nginx --> fpm : FastCGI (unix-socket)
+fpm --> db : PDO MySQL (TCP 127.0.0.1:3306)
+fpm ..> uploads : Захира кардани файлҳо
+nginx ..> uploads : Дастрасӣ ба файлҳои статикӣ
+
+@enduml
