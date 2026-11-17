@@ -4,7 +4,7 @@
 
   /* ---------- Theme (with smooth view-transition) ---------- */
   const icon = t => { const i = d.querySelector('[data-theme-toggle] i'); if (i) i.className = t === 'dark' ? 'bi bi-sun' : 'bi bi-moon-stars'; };
-  const apply = t => { root.setAttribute('data-bs-theme', t); try { localStorage.setItem('theme', t); } catch (e) {} icon(t); };
+  const apply = t => { root.setAttribute('data-bs-theme', t); try { localStorage.setItem('edms-theme', t); } catch (e) {} icon(t); };
   icon(root.getAttribute('data-bs-theme'));
   d.querySelectorAll('[data-theme-toggle]').forEach(b => b.addEventListener('click', () => {
     const next = root.getAttribute('data-bs-theme') === 'dark' ? 'light' : 'dark';
