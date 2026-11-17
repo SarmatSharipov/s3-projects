@@ -82,4 +82,21 @@
     const inp = b.parentElement.querySelector('input'); const show = inp.type === 'password';
     inp.type = show ? 'text' : 'password'; b.querySelector('i').className = show ? 'bi bi-eye-slash' : 'bi bi-eye';
   }));
+
+  /* ---------- Responsive tables: label every cell with its column header ---------- */
+  d.querySelectorAll('table').forEach(t => {
+    const heads = [...t.querySelectorAll('tr:first-child th')].map(h => h.textContent.trim());
+    if (!heads.length) return;
+    t.classList.add('rt');
+    t.querySelectorAll('tr').forEach(tr => [...tr.children].forEach((c, i) => { if (c.tagName === 'TD' && heads[i]) c.dataset.label = heads[i]; }));
+  });
+
+  /* ---------- Kanban type filter ---------- */
+  d.querySelectorAll('.chips-filter button').forEach(b => b.addEventListener('click', () => {
+    d.querySelectorAll('.chips-filter button').forEach(x => x.classList.toggle('on', x === b));
+    d.querySelectorAll('.k-card').forEach(c => { c.style.display = b.dataset.f === 'all' || c.dataset.type === b.dataset.f ? '' : 'none'; });
+  }));
+
+  /* ---------- Close mobile menu on navigation ---------- */
+  d.querySelectorAll('.sidebar a').forEach(a => a.addEventListener('click', () => toggle(false)));
 })();

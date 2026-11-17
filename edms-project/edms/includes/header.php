@@ -4,7 +4,7 @@ $cur = basename($_SERVER['SCRIPT_NAME']);
 $titles = [
     'index.php' => 'Саҳифаи асосӣ', 'documents.php' => 'Ҳуҷҷатҳо', 'document_add.php' => 'Бақайдгирии ҳуҷҷат',
     'document_view.php' => 'Ҳуҷҷат', 'tasks.php' => 'Супоришҳо', 'approvals.php' => 'Мувофиқасозӣ',
-    'reports.php' => 'Ҳисоботҳо', 'users.php' => 'Корбарон ва шӯъбаҳо', 'backup.php' => 'Нусхаи эҳтиётӣ',
+    'reports.php' => 'Ҳисоботҳо', 'kanban.php' => 'Тахтаи ҳуҷҷатҳо', 'users.php' => 'Корбарон ва шӯъбаҳо', 'backup.php' => 'Нусхаи эҳтиётӣ',
 ];
 $pageTitle = $pageTitle ?? ($titles[$cur] ?? 'EDMS');
 $active = in_array($cur, ['document_add.php', 'document_view.php']) ? 'documents.php' : $cur;
@@ -24,18 +24,20 @@ function side_link($href, $icon, $label, $active, $count = 0) {
 }
 ?>
 <!doctype html>
-<html lang="tg" data-bs-theme="light">
+<html lang="tg" data-bs-theme="dark">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#070913">
 <title><?= e($pageTitle) ?> — EDMS</title>
-<script>try{document.documentElement.setAttribute('data-bs-theme',localStorage.getItem('theme')||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'))}catch(e){}</script>
+<script>try{document.documentElement.setAttribute('data-bs-theme',localStorage.getItem('theme')||'dark')}catch(e){}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
 <link href="assets/style.css?v=2" rel="stylesheet">
+<link href="assets/glass.css?v=1" rel="stylesheet">
 </head>
 <body>
 <div class="backdrop-mobile"></div>
@@ -49,6 +51,7 @@ function side_link($href, $icon, $label, $active, $count = 0) {
     <?php
     side_link('index.php', 'grid-1x2-fill', 'Саҳифаи асосӣ', $active);
     side_link('documents.php', 'folder2-open', 'Ҳуҷҷатҳо', $active);
+    side_link('kanban.php', 'kanban-fill', 'Тахтаи ҳуҷҷатҳо', $active);
     side_link('tasks.php', 'check2-circle', 'Супоришҳо', $active, $navOverdue);
     side_link('approvals.php', 'patch-check-fill', 'Мувофиқасозӣ', $active, $navApprovals);
     side_link('reports.php', 'bar-chart-line-fill', 'Ҳисоботҳо', $active);
@@ -65,6 +68,14 @@ function side_link($href, $icon, $label, $active, $count = 0) {
     <a href="logout.php" class="icon-btn" style="width:36px;height:36px" title="Баромад"><i class="bi bi-box-arrow-right"></i></a>
   </div>
 </aside>
+
+<nav class="bottom-nav" aria-label="Навигатсияи ҳамроҳ">
+  <a href="index.php" class="<?= $active === 'index.php' ? 'on' : '' ?>"><i class="bi bi-grid-1x2-fill"></i><span>Асосӣ</span></a>
+  <a href="documents.php" class="<?= $active === 'documents.php' ? 'on' : '' ?>"><i class="bi bi-folder2-open"></i><span>Ҳуҷҷат</span></a>
+  <a href="kanban.php" class="<?= $active === 'kanban.php' ? 'on' : '' ?>"><i class="bi bi-kanban-fill"></i><span>Тахта</span></a>
+  <a href="tasks.php" class="<?= $active === 'tasks.php' ? 'on' : '' ?>"><i class="bi bi-check2-circle"></i><span>Супориш</span><?php if ($navOverdue): ?><em><?= $navOverdue ?></em><?php endif; ?></a>
+  <button type="button" data-burger><i class="bi bi-list"></i><span>Боз</span></button>
+</nav>
 
 <main class="main">
   <header class="topbar">
