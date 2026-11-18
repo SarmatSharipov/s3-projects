@@ -37,7 +37,31 @@ function side_link($href, $icon, $label, $active, $count = 0) {
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
 <link href="assets/style.css?v=2" rel="stylesheet">
-<link href="assets/glass.css?v=2" rel="stylesheet">
+<link href="assets/glass.css?v=4" rel="stylesheet">
+<style id="drawer-critical">
+@media (max-width: 991.98px) { .side-close { display: inline-grid; position: absolute; top: 14px; right: 14px; width: 42px; height: 42px; z-index: 5; cursor: pointer; } }
+@media (max-width: 991.98px) {
+  .sidebar {
+    width: min(76vw, 300px);
+    background: linear-gradient(160deg, rgba(20, 24, 52, .52), rgba(12, 14, 34, .62)) !important;
+    backdrop-filter: blur(16px) saturate(170%) !important; -webkit-backdrop-filter: blur(16px) saturate(170%) !important;
+    border: 1px solid rgba(255, 255, 255, .16);
+  }
+  [data-bs-theme="light"] .sidebar {
+    background: linear-gradient(160deg, rgba(255, 255, 255, .58), rgba(255, 255, 255, .38)) !important;
+    border-color: rgba(255, 255, 255, .85);
+  }
+  .backdrop-mobile { background: rgba(4, 6, 18, .22); backdrop-filter: none; -webkit-backdrop-filter: none; }
+  [data-bs-theme="light"] .backdrop-mobile { background: rgba(40, 30, 60, .12); }
+  .side-user { background: rgba(255, 255, 255, .10); backdrop-filter: blur(10px); }
+  [data-bs-theme="light"] .side-link { color: #3b3f63; }
+  [data-bs-theme="dark"] .side-link { color: #dfe2ff; }
+  .side-link.active { color: #fff; }
+}
+@media (max-width: 991.98px) { .sidebar.open ~ .bottom-nav { opacity: 0; pointer-events: none; transform: translateY(20px); } }
+.build-tag { margin-top: auto; text-align: center; font-size: .66rem; opacity: .5; padding: 6px 0; }
+.build-tag + .side-user { margin-top: 0; }
+</style>
 </head>
 <body>
 <div class="backdrop-mobile"></div>
@@ -46,6 +70,7 @@ function side_link($href, $icon, $label, $active, $count = 0) {
     <span class="brand-logo"><i class="bi bi-file-earmark-text-fill"></i></span>
     <span><b>EDMS</b><small>Гардиши ҳуҷҷатҳо</small></span>
   </a>
+  <button type="button" class="icon-btn side-close" data-close aria-label="Пӯшидан"><i class="bi bi-x-lg"></i></button>
   <nav>
     <div class="nav-label">Асосӣ</div>
     <?php
@@ -62,6 +87,7 @@ function side_link($href, $icon, $label, $active, $count = 0) {
     }
     ?>
   </nav>
+  <div class="build-tag">Нусха 18.11-c</div>
   <div class="side-user">
     <div class="avatar"><?= e(mb_strtoupper(mb_substr($u['full_name'], 0, 1))) ?></div>
     <div class="meta"><b><?= e($u['full_name']) ?></b><small><?= e(ROLES[$r]) ?></small></div>
@@ -77,6 +103,28 @@ function side_link($href, $icon, $label, $active, $count = 0) {
   <button type="button" data-burger><i class="bi bi-list"></i><span>Боз</span></button>
 </nav>
 
+<script>
+/* Пӯшидани меню — мустақил аз app.js (барои кэши кӯҳна ҳам кор мекунад) */
+(function () {
+  function close() {
+    var sb = document.querySelector('.sidebar'), bd = document.querySelector('.backdrop-mobile');
+    if (sb) sb.classList.remove('open'); if (bd) bd.classList.remove('show'); document.body.classList.remove('menu-open');
+  }
+  function bind(el) {
+    if (!el) return; var done = 0;
+    var h = function (e) { var t = Date.now(); if (t - done < 400) return; done = t; e.preventDefault(); e.stopPropagation(); close(); };
+    el.addEventListener('click', h, true); el.addEventListener('touchend', h, true);
+  }
+  document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('[data-close]').forEach(bind); bind(document.querySelector('.backdrop-mobile'));
+    document.querySelectorAll('.sidebar .side-link').forEach(function (a) { a.addEventListener('click', close); });
+    var sb = document.querySelector('.sidebar'), x0 = null;
+    if (sb) { sb.addEventListener('touchstart', function (e) { x0 = e.touches[0].clientX; }, { passive: true });
+      sb.addEventListener('touchend', function (e) { if (x0 !== null && x0 - e.changedTouches[0].clientX > 60) close(); x0 = null; }, { passive: true }); }
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
+  });
+})();
+</script>
 <main class="main">
   <header class="topbar">
     <button class="icon-btn burger" data-burger aria-label="Меню"><i class="bi bi-list"></i></button>

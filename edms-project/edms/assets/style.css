@@ -355,7 +355,7 @@ hr { border-color: var(--border); opacity: 1; }
 
 /* ---------------- Responsive ---------------- */
 @media (max-width: 991.98px) {
-  .sidebar { transform: translateX(-120%); }
+  .sidebar { transform: translateX(-120%); animation: none; }
   .sidebar.open { transform: none; }
   .backdrop-mobile { display: block; position: fixed; inset: 0; z-index: 1035; background: rgba(8,10,25,.5); backdrop-filter: blur(4px); opacity: 0; pointer-events: none; transition: .4s; }
   .backdrop-mobile.show { opacity: 1; pointer-events: auto; }

@@ -13,9 +13,14 @@
 
   /* ---------- Mobile sidebar ---------- */
   const sb = d.querySelector('.sidebar'), bd = d.querySelector('.backdrop-mobile');
-  const toggle = open => { sb && sb.classList.toggle('open', open); bd && bd.classList.toggle('show', open); };
+  const toggle = open => { sb && sb.classList.toggle('open', open); bd && bd.classList.toggle('show', open); d.body.classList.toggle('menu-open', open); };
   d.querySelectorAll('[data-burger]').forEach(b => b.addEventListener('click', () => toggle(!sb.classList.contains('open'))));
   bd && bd.addEventListener('click', () => toggle(false));
+  d.querySelectorAll('[data-close]').forEach(b => b.addEventListener('click', () => toggle(false)));
+  addEventListener('keydown', e => { if (e.key === 'Escape') toggle(false); });
+  let sx = null;   // swipe left to close
+  sb && sb.addEventListener('touchstart', e => { sx = e.touches[0].clientX; }, { passive: true });
+  sb && sb.addEventListener('touchend', e => { if (sx !== null && sx - e.changedTouches[0].clientX > 60) toggle(false); sx = null; }, { passive: true });
 
   /* ---------- Search shortcut "/" ---------- */
   const search = d.querySelector('.search-box input');

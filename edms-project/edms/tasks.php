@@ -12,8 +12,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $st->execute([trim($_POST['report']), $file, $tid, $uid]);
     if ($st->rowCount()) {
         // агар ҳамаи супоришҳои ҳуҷҷат иҷро шуда бошанд — ҳуҷҷат "иҷрошуда"
-        $pdo->prepare("UPDATE documents d SET status='done' WHERE d.id=(SELECT document_id FROM tasks WHERE id=?)
-            AND NOT EXISTS (SELECT 1 FROM tasks t WHERE t.document_id=d.id AND t.status<>'done')")->execute([$tid]);
+        $pdo->prepare("UPDATE documents SET status='done' WHERE id=(SELECT document_id FROM tasks WHERE id=?)
+            AND NOT EXISTS (SELECT 1 FROM tasks t WHERE t.document_id=documents.id AND t.status<>'done')")->execute([$tid]);
         flash('Ҳисобот пешниҳод шуд');
     }
     header('Location: tasks.php'); exit;
