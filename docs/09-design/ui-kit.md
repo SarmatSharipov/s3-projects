@@ -1,7 +1,6 @@
 # EDMS — Дизайн (Лаб 09, Figma)
 
 **Файл Figma:** https://www.figma.com/design/0XyWI8mln6I3WLAAbyjTIu  
-**Прототип:** *(баъди Share → Anyone with the link → can view линки прототипро инҷо гузоред)*  
 Саҳифаҳо: `01 Tokens & UI-kit` · `02 Flows & Wireframes` · `03 Mockups & Prototype` (3 саҳифа).
 
 ## Мундариҷаи файл
@@ -52,5 +51,3 @@
 | `approvals` | `pending` / `approved` / `rejected` | Интизорӣ / Тасдиқ / Рад | `review` / `approved` / `rejected` |
 | `tasks` | `new` / `in_progress` / `done` | Нав / Дар иҷро / Иҷрошуда | `registered` / `in_progress` / `done` |
 
-## Скриншотҳои макетҳо (`docs/09-design/screens/`)
-PNG-ҳои экспортшудаи макетҳо дар папкаи `docs/09-design/screens/` ҷойгир шудаанд.
