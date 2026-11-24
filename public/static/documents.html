@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="tg">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Рӯйхати ҳуҷҷатҳо — EDMS</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <link rel="stylesheet" href="../assets/css/app.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Гузариш ба мундариҷа</a>
+  <header>
+    <nav class="navbar navbar-expand-lg app-nav" aria-label="Меню асосӣ">
+      <div class="container">
+        <a class="navbar-brand fw-bold" href="documents.html">EDMS</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav" aria-controls="nav" aria-expanded="false" aria-label="Кушодани меню">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="nav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item"><a class="nav-link" href="documents.html" aria-current="page">Ҳуҷҷатҳо</a></li>
+            <li class="nav-item"><a class="nav-link" href="document.html">Корти ҳуҷҷат</a></li>
+            <li class="nav-item"><a class="nav-link" href="document-add.html">Бақайдгирӣ</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+  <main id="main" class="container py-4">
+    <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3">
+      <h1 class="h3 m-0">Ҳуҷҷатҳо</h1>
+      <a class="btn btn-primary" href="document-add.html">Бақайдгирии ҳуҷҷат</a>
+    </div>
+    <form class="panel mb-3" aria-label="Филтри ҳуҷҷатҳо">
+      <div class="row g-3 align-items-end">
+        <div class="col-12 col-md-5 col-lg-4">
+          <label class="form-label" for="q">Ҷустуҷӯ</label>
+          <input class="form-control" id="q" name="q" type="search" placeholder="Рақам ё сарлавҳа" autocomplete="off">
+        </div>
+        <div class="col-6 col-md-3 col-lg-3">
+          <label class="form-label" for="type">Намуд</label>
+          <select class="form-select" id="type" name="type">
+            <option value="">Ҳама</option>
+            <option value="incoming">Воридотӣ</option>
+            <option value="outgoing">Содиротӣ</option>
+            <option value="internal">Дохилӣ</option>
+          </select>
+        </div>
+        <div class="col-6 col-md-4 col-lg-3">
+          <label class="form-label" for="st">Ҳолат</label>
+          <select class="form-select" id="st" name="status">
+            <option value="">Ҳама</option>
+            <option value="registered">Бақайдгирифта</option>
+            <option value="review">Дар баррасӣ</option>
+            <option value="in_progress">Дар иҷро</option>
+            <option value="approved">Тасдиқшуда</option>
+            <option value="rejected">Радшуда</option>
+            <option value="done">Иҷрошуда</option>
+          </select>
+        </div>
+        <div class="col-12 col-lg-2 d-grid"><button class="btn btn-primary" type="submit">Ҷустуҷӯ</button></div>
+      </div>
+    </form>
+    <p id="doc-search-status" class="small text-body-secondary mb-2" aria-live="polite"></p>
+    <div class="panel p-0">
+      <div class="table-responsive">
+        <table class="table table-hover table-docs table-cards mb-0">
+          <caption class="visually-hidden">Рӯйхати ҳуҷҷатҳо</caption>
+          <thead>
+            <tr>
+              <th scope="col">Рақам</th>
+              <th scope="col">Сарлавҳа</th>
+              <th scope="col">Намуд</th>
+              <th scope="col">Фиристанда</th>
+              <th scope="col">Сана</th>
+              <th scope="col">Ҳолат</th>
+              <th scope="col" class="text-end">Амалҳо</th>
+            </tr>
+          </thead>
+          <tbody id="documents-tbody">
+            <tr>
+              <td data-label="Рақам">ВР-2026/041</td>
+              <td data-label="Сарлавҳа"><a href="document.html">Дархости таъмини дафтарӣ</a></td>
+              <td data-label="Намуд">Воридотӣ</td>
+              <td data-label="Фиристанда">Назарова М.</td>
+              <td data-label="Сана">2026-11-20</td>
+              <td data-label="Ҳолат"><span class="badge-status st-review">Дар баррасӣ</span></td>
+              <td class="text-end text-nowrap">
+                <button type="button" class="btn btn-sm btn-outline-danger" data-delete-url="/documents/41/delete" data-doc-title="ВР-2026/041 — Дархости таъмини дафтарӣ">Нест кардан</button>
+              </td>
+            </tr>
+            <tr>
+              <td data-label="Рақам">СД-2026/018</td>
+              <td data-label="Сарлавҳа"><a href="document.html">Ҷавоб ба Вазорати молия</a></td>
+              <td data-label="Намуд">Содиротӣ</td>
+              <td data-label="Фиристанда">Шарипов С.</td>
+              <td data-label="Сана">2026-11-18</td>
+              <td data-label="Ҳолат"><span class="badge-status st-approved">Тасдиқшуда</span></td>
+              <td class="text-end text-nowrap">
+                <button type="button" class="btn btn-sm btn-outline-danger" data-delete-url="/documents/18/delete" data-doc-title="СД-2026/018 — Ҷавоб ба Вазорати молия">Нест кардан</button>
+              </td>
+            </tr>
+            <tr>
+              <td data-label="Рақам">ДХ-2026/007</td>
+              <td data-label="Сарлавҳа"><a href="document.html">Фармоиши меҳнатӣ №12</a></td>
+              <td data-label="Намуд">Дохилӣ</td>
+              <td data-label="Фиристанда">Раҳимов А.</td>
+              <td data-label="Сана">2026-11-17</td>
+              <td data-label="Ҳолат"><span class="badge-status st-in_progress">Дар иҷро</span></td>
+              <td class="text-end text-nowrap">
+                <button type="button" class="btn btn-sm btn-outline-danger" data-delete-url="/documents/7/delete" data-doc-title="ДХ-2026/007 — Фармоиши меҳнатӣ №12">Нест кардан</button>
+              </td>
+            </tr>
+            <tr>
+              <td data-label="Рақам">ВР-2026/039</td>
+              <td data-label="Сарлавҳа"><a href="document.html">Шартномаи иҷора</a></td>
+              <td data-label="Намуд">Воридотӣ</td>
+              <td data-label="Фиристанда">Қодиров Ф.</td>
+              <td data-label="Сана">2026-11-14</td>
+              <td data-label="Ҳолат"><span class="badge-status st-rejected">Радшуда</span></td>
+              <td class="text-end text-nowrap">
+                <button type="button" class="btn btn-sm btn-outline-danger" data-delete-url="/documents/39/delete" data-doc-title="ВР-2026/039 — Шартномаи иҷора">Нест кардан</button>
+              </td>
+            </tr>
+            <tr>
+              <td data-label="Рақам">ДХ-2026/005</td>
+              <td data-label="Сарлавҳа"><a href="document.html">Ҳисоботи моҳонаи октябр</a></td>
+              <td data-label="Намуд">Дохилӣ</td>
+              <td data-label="Фиристанда">Юсупова Н.</td>
+              <td data-label="Сана">2026-11-10</td>
+              <td data-label="Ҳолат"><span class="badge-status st-done">Иҷрошуда</span></td>
+              <td class="text-end text-nowrap">
+                <button type="button" class="btn btn-sm btn-outline-danger" data-delete-url="/documents/5/delete" data-doc-title="ДХ-2026/005 — Ҳисоботи моҳонаи октябр">Нест кардан</button>
+              </td>
+            </tr>
+            <tr>
+              <td data-label="Рақам">ВР-2026/036</td>
+              <td data-label="Сарлавҳа"><a href="document.html">Мактуби ҳамкорӣ</a></td>
+              <td data-label="Намуд">Воридотӣ</td>
+              <td data-label="Фиристанда">Назарова М.</td>
+              <td data-label="Сана">2026-11-09</td>
+              <td data-label="Ҳолат"><span class="badge-status st-registered">Бақайдгирифта</span></td>
+              <td class="text-end text-nowrap">
+                <button type="button" class="btn btn-sm btn-outline-danger" data-delete-url="/documents/36/delete" data-doc-title="ВР-2026/036 — Мактуби ҳамкорӣ">Нест кардан</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <nav class="mt-3" aria-label="Саҳифабандӣ">
+      <ul class="pagination">
+        <li class="page-item disabled"><span class="page-link">Қаблӣ</span></li>
+        <li class="page-item active" aria-current="page"><span class="page-link">1</span></li>
+        <li class="page-item"><a class="page-link" href="#">2</a></li>
+        <li class="page-item"><a class="page-link" href="#">Баъдӣ</a></li>
+      </ul>
+    </nav>
+
+    <div class="modal fade" id="confirm-delete-modal" tabindex="-1" aria-labelledby="confirm-delete-title" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h2 class="modal-title h5" id="confirm-delete-title">Ҳуҷҷат нест карда шавад?</h2>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Пӯшидан"></button>
+          </div>
+          <div class="modal-body">
+            <p class="mb-0">Ҳуҷҷати <strong id="confirm-delete-name"></strong> нест карда мешавад. Ин амалро бекор кардан мумкин нест.</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Бекор кардан</button>
+            <form id="confirm-delete-form" method="post" action="#">
+              <button type="submit" class="btn btn-danger">Нест кардан</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+  <footer class="app-footer py-3">
+    <div class="container">© 2026 EDMS — Низоми электронии ҳуҷҷатгардиш</div>
+  </footer>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+  <script type="module" src="../assets/js/app.js"></script>
+</body>
+</html>

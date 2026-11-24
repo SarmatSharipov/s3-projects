@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="tg">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Корти ҳуҷҷат — EDMS</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <link rel="stylesheet" href="../assets/css/app.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Гузариш ба мундариҷа</a>
+  <header>
+    <nav class="navbar navbar-expand-lg app-nav" aria-label="Меню асосӣ">
+      <div class="container">
+        <a class="navbar-brand fw-bold" href="documents.html">EDMS</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav" aria-controls="nav" aria-expanded="false" aria-label="Кушодани меню">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="nav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item"><a class="nav-link" href="documents.html">Ҳуҷҷатҳо</a></li>
+            <li class="nav-item"><a class="nav-link" href="document.html" aria-current="page">Корти ҳуҷҷат</a></li>
+            <li class="nav-item"><a class="nav-link" href="document-add.html">Бақайдгирӣ</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+  <main id="main" class="container py-4">
+    <nav aria-label="Роҳи саҳифа">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="documents.html">Ҳуҷҷатҳо</a></li>
+        <li class="breadcrumb-item active" aria-current="page">ВР-2026/041</li>
+      </ol>
+    </nav>
+    <article class="panel doc-card">
+      <header class="doc-card__head">
+        <h1 class="h3 mb-2">Дархости таъмини дафтарӣ</h1>
+        <span class="badge-status st-review">Дар баррасӣ</span>
+      </header>
+      <div class="doc-card__actions">
+        <a class="btn btn-outline-secondary" href="document-add.html">Таҳрир</a>
+        <button class="btn btn-outline-danger" type="button" data-delete-url="/documents/41/delete" data-doc-title="ВР-2026/041 — Дархости таъмини дафтарӣ">Нест кардан</button>
+        <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#confirm">Тасдиқ кардан</button>
+      </div>
+      <dl class="doc-card__meta meta-list">
+        <div><dt>Рақам</dt><dd>ВР-2026/041</dd></div>
+        <div><dt>Намуд</dt><dd>Воридотӣ</dd></div>
+        <div><dt>Фиристанда</dt><dd>Назарова М.</dd></div>
+        <div><dt>Мӯҳлат</dt><dd>2026-11-27</dd></div>
+      </dl>
+      <section class="doc-card__body" aria-labelledby="d-desc">
+        <h2 class="h5" id="d-desc">Тавсиф</h2>
+        <p>Дархост барои харидории чизҳои дафтарӣ ба шӯъбаи ҳисобдорӣ. Ҳуҷҷат барои баррасӣ ба роҳбарияти шӯъба фиристода шудааст.</p>
+        <h2 class="h5">Файлҳо</h2>
+        <ul><li><a href="#">дархост.pdf</a> <span class="text-muted-2">(240 КБ)</span></li></ul>
+      </section>
+      <aside class="doc-card__side" aria-labelledby="d-hist">
+        <h2 class="h5" id="d-hist">Таърихи тасдиқ</h2>
+        <ol class="timeline">
+          <li><strong>Бақайдгирӣ</strong><br><span class="text-muted-2">20.11, Назарова М.</span></li>
+          <li><strong>Баррасӣ</strong><br><span class="text-muted-2">21.11, Раҳимов А. — интизорӣ</span></li>
+        </ol>
+      </aside>
+    </article>
+
+    <div class="modal fade" id="confirm" tabindex="-1" aria-labelledby="confirmTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h2 class="modal-title h5" id="confirmTitle">Тасдиқи амал</h2>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Пӯшидан"></button>
+          </div>
+          <div class="modal-body">Шумо ҳуҷҷати ВР-2026/041-ро тасдиқ мекунед?</div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Бекор кардан</button>
+            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Тасдиқ</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="confirm-delete-modal" tabindex="-1" aria-labelledby="confirm-delete-title" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h2 class="modal-title h5" id="confirm-delete-title">Ҳуҷҷат нест карда шавад?</h2>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Пӯшидан"></button>
+          </div>
+          <div class="modal-body">
+            <p class="mb-0">Ҳуҷҷати <strong id="confirm-delete-name"></strong> нест карда мешавад. Ин амалро бекор кардан мумкин нест.</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Бекор кардан</button>
+            <form id="confirm-delete-form" method="post" action="#">
+              <button type="submit" class="btn btn-danger">Нест кардан</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+  <footer class="app-footer py-3">
+    <div class="container">© 2026 EDMS — Низоми электронии ҳуҷҷатгардиш</div>
+  </footer>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+  <script type="module" src="../assets/js/app.js"></script>
+</body>
+</html>

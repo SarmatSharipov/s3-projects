@@ -1,0 +1,101 @@
+:root {
+  --edms-primary: #1d4ed8;
+  --edms-primary-hover: #1e40af;
+  --edms-text: #0f172a;
+  --edms-muted: #475569;
+  --edms-bg: #f8fafc;
+  --edms-surface: #ffffff;
+  --edms-border: #cbd5e1;
+  --edms-focus: #f59e0b;
+  --edms-radius: 0.75rem;
+  --edms-space: 1rem;
+
+  --bs-primary: var(--edms-primary);
+  --bs-primary-rgb: 29, 78, 216;
+  --bs-body-bg: var(--edms-bg);
+  --bs-body-color: var(--edms-text);
+  --bs-border-color: var(--edms-border);
+  --bs-border-radius: var(--edms-radius);
+  --bs-link-color: var(--edms-primary);
+  --bs-link-hover-color: var(--edms-primary-hover);
+}
+*, *::before, *::after { box-sizing: border-box; }
+body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; min-height: 100vh; display: flex; flex-direction: column; }
+main { flex: 1; }
+.text-muted-2 { color: var(--edms-muted); }
+
+/* кнопка */
+.btn-primary {
+  --bs-btn-bg: var(--edms-primary); --bs-btn-border-color: var(--edms-primary);
+  --bs-btn-hover-bg: var(--edms-primary-hover); --bs-btn-hover-border-color: var(--edms-primary-hover);
+  --bs-btn-active-bg: var(--edms-primary-hover); --bs-btn-active-border-color: var(--edms-primary-hover);
+  min-height: 44px;
+}
+.btn, .form-control, .form-select { min-height: 44px; }
+
+/* фокуси намоён (WCAG 2.4.7) */
+a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible, .btn:focus-visible {
+  outline: 3px solid var(--edms-focus); outline-offset: 2px; box-shadow: none;
+}
+.skip-link { position: absolute; left: 0.5rem; top: -4rem; background: var(--edms-primary); color: #fff; padding: 0.6rem 1rem; border-radius: 0.5rem; z-index: 2000; }
+.skip-link:focus { top: 0.5rem; color: #fff; }
+
+/* navbar / footer */
+.app-nav { background: var(--edms-surface); border-bottom: 1px solid var(--edms-border); }
+.app-nav .nav-link { color: var(--edms-text); min-height: 44px; display: flex; align-items: center; }
+.app-nav .nav-link[aria-current="page"] { color: var(--edms-primary); font-weight: 600; text-decoration: underline; text-underline-offset: 6px; }
+.app-footer { border-top: 1px solid var(--edms-border); background: var(--edms-surface); color: var(--edms-muted); font-size: 0.875rem; }
+
+/* карточка */
+.panel { background: var(--edms-surface); border: 1px solid var(--edms-border); border-radius: var(--edms-radius); padding: var(--edms-space); }
+
+/* бейдж-статус: матн + ранг (на танҳо ранг) */
+.badge-status { display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.25rem 0.65rem; border-radius: 999px; font-size: 0.8125rem; font-weight: 600; background: var(--b-bg); color: var(--b-fg); }
+.badge-status::before { content: ""; width: 0.5rem; height: 0.5rem; border-radius: 50%; background: currentColor; }
+.st-registered { --b-bg: #e2e8f0; --b-fg: #334155; }
+.st-review     { --b-bg: #fef3c7; --b-fg: #92400e; }
+.st-in_progress{ --b-bg: #e0f2fe; --b-fg: #075985; }
+.st-approved   { --b-bg: #d1fae5; --b-fg: #065f46; }
+.st-rejected   { --b-bg: #fee2e2; --b-fg: #991b1b; }
+.st-done       { --b-bg: #ede9fe; --b-fg: #5b21b6; }
+
+/* ҷадвал */
+.table-docs th { white-space: nowrap; color: var(--edms-muted); font-weight: 600; }
+.table-docs td, .table-docs th { vertical-align: middle; }
+
+/* ===== Корти ҳуҷҷат: CSS Grid + grid-template-areas, mobile-first ===== */
+.doc-card { display: grid; gap: var(--edms-space); grid-template-columns: 1fr;
+  grid-template-areas: "head" "meta" "body" "actions" "side"; }
+.doc-card__head { grid-area: head; }
+.doc-card__meta { grid-area: meta; }
+.doc-card__body { grid-area: body; }
+.doc-card__actions { grid-area: actions; display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.doc-card__side { grid-area: side; }
+@media (min-width: 768px) {
+  .doc-card { grid-template-columns: 1fr 1fr;
+    grid-template-areas: "head head" "meta meta" "body side" "actions actions"; }
+}
+@media (min-width: 992px) {
+  .doc-card { grid-template-columns: 2fr 1fr;
+    grid-template-areas: "head actions" "meta side" "body side"; }
+  .doc-card__actions { justify-content: flex-end; align-self: start; }
+}
+.meta-list { display: grid; gap: 0.5rem 1.5rem; grid-template-columns: 1fr; margin: 0; }
+@media (min-width: 576px) { .meta-list { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1200px) { .meta-list { grid-template-columns: repeat(4, 1fr); } }
+.meta-list dt { color: var(--edms-muted); font-size: 0.8125rem; font-weight: 500; }
+.meta-list dd { margin: 0; font-weight: 600; }
+.timeline { list-style: none; padding: 0; margin: 0; display: grid; gap: 0.75rem; }
+.timeline li { padding-left: 1rem; border-left: 3px solid var(--edms-border); }
+
+.form-text, .invalid-feedback { font-size: 0.875rem; }
+.required::after { content: " *"; color: #b91c1c; }
+
+/* ҷадвал → корт дар экрани танг (data-label) */
+@media (max-width: 767.98px) {
+  .table-cards thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+  .table-cards, .table-cards tbody, .table-cards tr, .table-cards td { display: block; width: 100%; }
+  .table-cards tr { padding: 0.75rem 1rem; border-bottom: 1px solid var(--edms-border); }
+  .table-cards td { display: flex; justify-content: space-between; gap: 1rem; padding: 0.25rem 0; border: 0; }
+  .table-cards td::before { content: attr(data-label); color: var(--edms-muted); font-weight: 600; }
+}
