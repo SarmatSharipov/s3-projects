@@ -1,0 +1,35 @@
+# Ҳисоботи санҷиши масирҳо (curl -i) — Lab 12 (EDMS)
+# Сервер: http://localhost:8000 (php -S localhost:8000 -t public)
+
+--- GET / ---
+HTTP/1.1 200 OK
+Content-Type: text/html; charset=UTF-8
+
+--- GET /documents ---
+HTTP/1.1 200 OK
+Content-Type: text/html; charset=UTF-8
+
+--- GET /documents/create ---
+HTTP/1.1 200 OK
+Content-Type: text/html; charset=UTF-8
+
+--- GET /documents/1 ---
+HTTP/1.1 200 OK
+Content-Type: text/html; charset=UTF-8
+
+--- GET /reports/status ---
+HTTP/1.1 200 OK
+Content-Type: text/html; charset=UTF-8
+
+--- GET /documents/999999 (id номавҷ -> 404) ---
+HTTP/1.1 404 Not Found
+Content-Type: text/html; charset=UTF-8
+
+--- GET /nope (масири номавҷ -> 404) ---
+HTTP/1.1 404 Not Found
+Content-Type: text/html; charset=UTF-8
+
+--- POST /documents (методи нодуруст барои масири GET -> 405) ---
+HTTP/1.1 405 Method Not Allowed
+Allow: GET
+Content-Type: text/html; charset=UTF-8
